@@ -1,0 +1,19 @@
+{
+  "name": "ovira-fertility-care",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "sheets:setup": "node --env-file=.env.local scripts/setup-sheets.mjs",
+    "admin:password": "node scripts/admin-password.mjs",
+    "admin:secret": "node -e \"console.log(require('node:crypto').randomBytes(32).toString('hex'))\""
+  },
+  "engines": { "node": ">=20.9" },
+  "dependencies": {
+    "next": "^16.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}
