@@ -30,7 +30,8 @@ export default function Carousel({ slides }) {
     onFocus={() => setFocus(true)} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocus(false); }}>
     <div className="hero-slides">{slides.map((slide, index) =>
       <figure key={slide.id} className={"hero-slide" + (index === current ? " is-active" : "")} aria-hidden={index !== current}>
-        <img src={slide.image} alt={slide.alt} fetchPriority={index === 0 ? "high" : "low"} />
+        <img src={slide.image} alt={slide.alt} loading={index === 0 ? "eager" : "lazy"}
+          decoding="async" fetchPriority={index === 0 ? "high" : "low"} />
         <figcaption><span>{String(index + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</span><b>{slide.caption}</b></figcaption>
       </figure>)}</div>
     {slides.length > 1 && <div className="slider-controls">

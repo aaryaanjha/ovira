@@ -1,8 +1,14 @@
 import AppointmentForm from "../../../components/AppointmentForm";
 import { ContactLines } from "../../../components/PublicContent";
 import { publicContact } from "../../../lib/store.mjs";
+import { pageMetadata } from "../../../lib/seo.mjs";
 
-export const metadata = { title: "Contact Us", description: "Contact OVIRA or request a thoughtful fertility care appointment." };
+export const metadata = pageMetadata({
+  title: "Contact OVIRA Fertility Care",
+  description: "Contact OVIRA with questions or request a fertility care appointment. Our team can help you understand possible next steps.",
+  path: "/appointment",
+  keywords: ["contact OVIRA", "fertility care appointment", "fertility consultation"],
+});
 
 export default async function Page() {
   const contact = await publicContact();
@@ -10,7 +16,7 @@ export default async function Page() {
     <main>
       <section className="page-hero wrap">
         <p className="eyebrow">A thoughtful first step</p>
-        <h1>Let’s start with<br /><em>a conversation.</em></h1>
+        <h1>Start your fertility care<br /><em>conversation.</em></h1>
         <p>Share a few details and our care team will reach out to help you find the right next step.</p>
       </section>
       <section className="contact-section">

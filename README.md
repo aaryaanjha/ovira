@@ -23,3 +23,9 @@ The SQLite database and uploaded images are stored under `.data/` by default. Ke
 For production, deploy to a Node.js host with persistent storage, use HTTPS, and set `APP_ORIGIN` to the exact public origin (for example, `https://your-domain.example`). The admin uses a signed, HttpOnly session cookie that expires after eight hours. Rotating the password hash or session secret invalidates existing sessions. Use a single application instance for SQLite and configure host-level rate limits; set `TRUSTED_CLIENT_IP_HEADER` only when a trusted proxy overwrites that header.
 
 Before deployment, run `npm run build` and `npm start`. Verify that a test appointment appears in Leads and Appointments, update its status, publish a test blog, and confirm published content and contact changes appear on the public site. Do not enter medical information in the appointment form or staff notes.
+
+## Search and sharing
+
+Set `APP_ORIGIN` to the canonical production origin. The site generates canonical URLs, page metadata, social-sharing cards, organization and article structured data, `robots.txt`, and an XML sitemap at `/sitemap.xml`. Submit the sitemap to Google Search Console and Bing Webmaster Tools after deployment, and verify that the live pages and images are crawlable.
+
+Keep published health content accurate, cite reputable medical sources, and have clinical claims reviewed by a qualified professional. Search rankings and AI-generated answers cannot be guaranteed. Backlinks are earned through useful content, relevant professional relationships, and legitimate editorial mentions; do not buy links or use automated link schemes.

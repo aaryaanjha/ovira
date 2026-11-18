@@ -19,6 +19,7 @@ export default function Journal({ articles }) {
           key={value} type="button" aria-pressed={category === value} onClick={() => setCategory(value)}>{value || "All"}</button>)}
       </div>
     </div>
+    <h2 className="journal-list-heading">Fertility and IVF articles</h2>
     <div className="article-grid article-grid-list">{matches.map(({ article, index }) => <ArticleCard key={article.id} article={article} index={index} />)}</div>
     <p className="empty-search" role="status" hidden={matches.length > 0}>No articles match your search. Try another phrase.</p>
   </section>;

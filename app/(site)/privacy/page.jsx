@@ -1,6 +1,11 @@
 import { publicContact } from "../../../lib/store.mjs";
+import { pageMetadata } from "../../../lib/seo.mjs";
 
-export const metadata = { title: "Privacy Policy", description: "How OVIRA handles appointment information." };
+export const metadata = pageMetadata({
+  title: "Privacy Policy",
+  description: "Read how OVIRA handles the contact details you share through appointment requests and how to ask about your information.",
+  path: "/privacy",
+});
 
 export default async function Page() {
   const { email } = await publicContact();

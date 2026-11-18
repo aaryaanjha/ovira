@@ -2,8 +2,14 @@ import Carousel from "../../components/Carousel";
 import IVFCycle from "../../components/IVFCycle";
 import { ArticleCard, ContactRibbon, MythPreview } from "../../components/PublicContent";
 import { publicArticles, publicContact, publicMyths, publicSlides, publicTestimonials } from "../../lib/store.mjs";
+import { pageMetadata } from "../../lib/seo.mjs";
 
-export const metadata = { title: "OVIRA — Fertility care with you at heart", description: "Compassionate fertility guidance and personalized reproductive care from OVIRA." };
+export const metadata = pageMetadata({
+  title: "Fertility Care & IVF Guidance",
+  description: "Explore compassionate fertility care, IVF guidance, and clear answers to common fertility questions from the OVIRA care team.",
+  path: "/",
+  keywords: ["fertility care", "IVF guidance", "fertility support", "IVF treatment information", "fertility questions"],
+});
 
 export default async function Home() {
   const [articles, contact, myths, slides, testimonials] = await Promise.all([
@@ -14,7 +20,7 @@ export default async function Home() {
       <section className="hero wrap" id="home">
         <div className="hero-copy">
           <p className="eyebrow"><span className="eyebrow-dot" /> Fertility care, made personal</p>
-          <h1>Your next chapter<br />starts with <em>care.</em></h1>
+          <h1>Fertility care<br />that starts with <em>you.</em></h1>
           <p className="hero-lead">Expert fertility guidance, thoughtful science, and a team beside you at every step of your journey.</p>
           <div className="hero-actions">
             <a className="button button-primary" href="/appointment">Book your appointment <span aria-hidden="true">↗</span></a>

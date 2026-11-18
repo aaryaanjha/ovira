@@ -8,7 +8,7 @@ export default function SiteFooter({ contact, socials = [] }) {
         <div className="footer-grid">
           <div className="footer-brand">
             <a className="brand" href="/">
-              <span className="brand-mark"><img src="/assets/ovira-logo.png" alt="" /></span>
+              <span className="brand-mark"><img src="/assets/ovira-logo.png" alt="" width="40" height="40" /></span>
               <span className="brand-word">OVIRA<small>Life Begins Here</small></span>
             </a>
             <p>Compassionate fertility guidance, thoughtful science, and personal support for every journey.</p>

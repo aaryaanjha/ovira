@@ -1,6 +1,11 @@
 import { publicContact } from "../../../lib/store.mjs";
+import { pageMetadata } from "../../../lib/seo.mjs";
 
-export const metadata = { title: "Terms & Conditions", description: "Terms and conditions for using the OVIRA website." };
+export const metadata = pageMetadata({
+  title: "Terms and Conditions",
+  description: "Review the terms for using OVIRA’s website and submitting appointment requests.",
+  path: "/terms",
+});
 
 export default async function Page() {
   const { email } = await publicContact();
