@@ -1,5 +1,5 @@
 import { contactLinks, dateLabel } from "../lib/content.mjs";
-import { myths } from "../lib/seed.mjs";
+import ResilientImage from "./ResilientImage";
 
 const labels = {
   "Getting started": "A first step", "Fertility basics": "Fertility, simply",
@@ -8,12 +8,15 @@ const labels = {
 const visualLabel = category => labels[category] || category;
 
 export function ArticleCard({ article, index }) {
+  const hasFeaturedImage = Boolean(article.featuredImage);
   return <article className="article-card">
-    <a href={"/article/" + encodeURIComponent(article.id)} aria-label={"Read " + article.title}>
-      <div className={"article-visual tone-" + (index % 3 + 1)}>
-        <span className="visual-label">{visualLabel(article.category)}</span>
-        <span className="visual-number">{String(index + 1).padStart(2, "0")}</span>
-        <span className="visual-shape" />
+    <a href={"/article/" + encodeURIComponent(article.slug || article.id)} aria-label={"Read " + article.title}>
+      <div className={"article-visual tone-" + (index % 3 + 1) + (hasFeaturedImage ? " has-featured-image" : "")}>
+        {hasFeaturedImage ? <ResilientImage src={article.featuredImage} /> : <>
+          <span className="visual-label">{visualLabel(article.category)}</span>
+          <span className="visual-number">{String(index + 1).padStart(2, "0")}</span>
+          <span className="visual-shape" />
+        </>}
       </div>
       <div className="article-body">
         <div className="article-meta">{article.category}<span />{dateLabel(article.publishedAt)}</div>
@@ -25,27 +28,38 @@ export function ArticleCard({ article, index }) {
 
 export function ArticleView({ article, related, index }) {
   const words = [article.intro, ...article.sections.flat()].join(" ").trim().split(/\s+/).length;
+  const hasFeaturedImage = Boolean(article.featuredImage);
   return <main>
-    <div className={"article-cover tone-" + (index % 3 + 1)}><span className="visual-label">{visualLabel(article.category)}</span><span className="visual-shape" /></div>
+    <div className={"article-cover tone-" + (index % 3 + 1) + (hasFeaturedImage ? " has-featured-image" : "")}>
+      {hasFeaturedImage ? <ResilientImage src={article.featuredImage} /> : <>
+        <span className="visual-label">{visualLabel(article.category)}</span><span className="visual-shape" />
+      </>}
+    </div>
     <article className="article-reading">
-      <a className="article-back" href="/blogs">← Back to the journal</a>
+      <a className="article-back" href="/blogs">← Back to blogs</a>
       <div className="article-meta" style={{ marginTop: 25 }}>{article.category}<span />{dateLabel(article.publishedAt)}<span />{Math.max(1, Math.ceil(words / 225))} min read</div>
       <h1>{article.title}</h1><p className="article-intro">{article.intro}</p>
       {article.sections.map(([heading, body], i) => <section key={i}><h2>{heading}</h2><p className="article-paragraph">{body}</p></section>)}
       <p>Every person’s experience is different. For guidance that considers your needs, speak with a qualified fertility clinician.</p>
     </article>
     {!!related.length && <section className="wrap related-section"><h2>Keep exploring</h2>
-      <div className="article-grid">{related.map((item, i) => <ArticleCard key={item.id} article={item} index={i} />)}</div>
+      <div className="article-grid">{related.filter(item => item.id !== article.id).map((item, i) => <ArticleCard key={item.id} article={item} index={i} />)}</div>
     </section>}
   </main>;
 }
 
-export function MythList() {
+export function MythPreview({ item, index }) {
+  return <details className="myth-card myth-preview-card">
+    <summary><span className="myth-number">{String(index + 1).padStart(2, "0")}</span><span><span className="myth-label">Myth</span>{item.myth}</span><span className="plus" aria-hidden="true">+</span></summary>
+    <p><b>Fact:</b> {item.fact}</p>
+    {item.more && <p>{item.more}</p>}
+  </details>;
+}
+
+export function MythList({ items }) {
   return <div id="myths-all" className="myth-list myth-list-page">
-    {myths.map(({ myth, fact, more }, i) => <details className="myth-card" key={myth}>
-      <summary><span className="myth-number">{String(i + 1).padStart(2, "0")}</span><span>{myth}</span><span className="plus" aria-hidden="true">+</span></summary>
-      <p><b>Fact:</b> {fact} {more}</p><a href="/appointment">Talk it through with our team →</a>
-    </details>)}
+    {items.map((item, index) => <MythPreview key={item.id} item={item} index={index} />)}
+    {!items.length && <p className="empty-search">Myths &amp; Facts are being updated. Please check back soon.</p>}
   </div>;
 }
 

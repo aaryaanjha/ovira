@@ -6,11 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "sheets:setup": "node --env-file=.env.local scripts/setup-sheets.mjs",
     "admin:password": "node scripts/admin-password.mjs",
     "admin:secret": "node -e \"console.log(require('node:crypto').randomBytes(32).toString('hex'))\""
   },
-  "engines": { "node": ">=20.9" },
+  "engines": { "node": ">=22.13" },
   "dependencies": {
     "next": "^16.0.0",
     "react": "^19.2.0",

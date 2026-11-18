@@ -19,6 +19,7 @@ export default function AppointmentForm() {
     if (!values.name.trim()) nextErrors.name = "Please enter your name.";
     if (!/^\+?[\d ().-]+$/.test(values.phone) || !/^\d{10,15}$/.test(values.phone.replace(/\D/g, ""))) nextErrors.phone = "Please enter a valid phone number.";
     if ((values.email || method === "Email") && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) nextErrors.email = "Please enter a valid email address.";
+    if (values.preferredDate && Number.isNaN(Date.parse(values.preferredDate + "T00:00:00Z"))) nextErrors.preferredDate = "Please choose a valid date.";
     if (!values.consent) nextErrors.consent = "Please agree to the Terms and Privacy Policy to continue.";
     setErrors(nextErrors);
     setError("");
@@ -56,7 +57,7 @@ export default function AppointmentForm() {
 
   return <form id="appointment-form" className="appointment-form" method="post" action="/api/appointments" noValidate onSubmit={submit}
     onChange={event => { const name = event.target.name; if (errors[name]) setErrors(current => ({ ...current, [name]: undefined })); }}>
-    <div className="form-heading"><span className="eyebrow">Book your appointment</span><h2>How can we reach you?</h2>
+    <div className="form-heading"><span className="eyebrow">Contact us</span><h2>How can we reach you?</h2>
       <p>Fields marked <span className="required">*</span> are required.</p></div>
     <fieldset className="appointment-fields" disabled={status === "pending" || status === "success"}>
       <div className="form-grid">
@@ -68,6 +69,12 @@ export default function AppointmentForm() {
           <select name="contact" value={method} onChange={event => setMethod(event.target.value)}>
             <option value="Phone">Phone call</option><option>WhatsApp</option><option>Email</option>
           </select>
+        </label>
+        <label className="field">Preferred appointment date <span className="optional">Optional</span>
+          <input name="preferredDate" type="date" />
+        </label>
+        <label className="field">Preferred time <span className="optional">Optional</span>
+          <input name="preferredTime" type="time" />
         </label>
         <label className="field full-field">Anything you’d like us to know? <span className="optional">Optional</span>
           <textarea name="message" rows={3} maxLength={1000} placeholder="Share a question or let us know a good time to call." aria-describedby="message-note" />

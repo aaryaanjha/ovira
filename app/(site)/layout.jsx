@@ -1,10 +1,10 @@
 import SiteHeader from "../../components/SiteHeader";
 import SiteFooter from "../../components/SiteFooter";
-import { publicContact } from "../../lib/store.mjs";
+import { publicContact, publicSocials } from "../../lib/store.mjs";
 
 export const dynamic = "force-dynamic";
 
 export default async function SiteLayout({ children }) {
-  const contact = await publicContact();
-  return <><SiteHeader />{children}<SiteFooter contact={contact} /></>;
+  const [contact, socials] = await Promise.all([publicContact(), publicSocials()]);
+  return <><SiteHeader />{children}<SiteFooter contact={contact} socials={socials} /></>;
 }

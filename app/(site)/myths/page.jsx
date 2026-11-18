@@ -1,9 +1,12 @@
 import { MythList } from "../../../components/PublicContent";
+import MythQuestionForm from "../../../components/MythQuestionForm";
+import { publicMyths } from "../../../lib/store.mjs";
 
-export const metadata = { title: "Fertility myths & facts", description: "Clear answers to common fertility questions." };
+export const metadata = { title: "Myths & Facts", description: "Clear answers to common fertility questions." };
 
-export default function Page() {
+export default async function Page() {
+  const myths = await publicMyths();
   return (
-    <main><section className="page-hero wrap"><p className="eyebrow">Clarity over confusion</p><h1>Let’s talk about<br /><em>what’s true.</em></h1><p>Fertility can come with a lot of noise. Here are thoughtful, evidence-informed starting points for your questions.</p></section><section className="wrap myths-page"><div className="disclaimer-note"><span>✳</span><p>These general explanations are for education, not personal medical advice. Your care team can help you understand what applies to you.</p></div><MythList /><div className="inline-cta"><p>Have a question of your own?</p><a className="button button-primary" href="/appointment">Talk with our team <span>↗</span></a></div></section></main>
+    <main><section className="page-hero wrap"><p className="eyebrow">IVF: Myths &amp; Facts</p><h1>Breaking the myths.<br /><em>Understanding the facts.</em></h1><p>IVF is an advanced fertility treatment, but common misconceptions can create fear and confusion. Explore clear, thoughtful answers to questions people often ask.</p></section><section className="wrap myths-page"><div className="disclaimer-note"><span aria-hidden="true">✳</span><p>These general explanations are for education, not personal medical advice. Your care team can help you understand what applies to you.</p></div><MythList items={myths} /><MythQuestionForm /></section></main>
   );
 }

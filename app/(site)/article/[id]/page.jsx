@@ -7,14 +7,14 @@ const loadArticles = cache(publicArticles);
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
-  const article = (await loadArticles()).find(item => item.id === id);
-  return article ? { title: article.title, description: article.description } : {};
+  const article = (await loadArticles()).find(item => item.id === id || item.slug === id);
+  return article ? { title: article.seoTitle || article.title, description: article.metaDescription || article.description } : {};
 }
 
 export default async function Article({ params }) {
   const { id } = await params;
   const articles = await loadArticles();
-  const index = articles.findIndex(item => item.id === id);
+  const index = articles.findIndex(item => item.id === id || item.slug === id);
   if (index === -1) notFound();
   return <ArticleView article={articles[index]} related={articles.filter(item => item.id !== id).slice(0, 3)} index={index} />;
 }
