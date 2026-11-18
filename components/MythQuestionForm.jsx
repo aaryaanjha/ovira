@@ -2,13 +2,22 @@
 
 import { useRef, useState } from "react";
 
-export default function MythQuestionForm() {
+export default function MythQuestionForm({ available = true }) {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [errors, setErrors] = useState({});
   const id = useRef("");
   const saving = useRef(false);
+
+  if (!available) {
+    return <section className="myth-question">
+      <div className="myth-question-cta">
+        <div><p className="eyebrow">Still have questions?</p><h2>Our question form is temporarily unavailable.</h2></div>
+        <a className="button button-primary" href="/appointment">Contact the care team <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>;
+  }
 
   async function submit(event) {
     event.preventDefault();

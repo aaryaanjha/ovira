@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { contactLinks } from "../lib/content.mjs";
 
-export default function AppointmentForm() {
+export default function AppointmentForm({ available = true, contact }) {
   const [method, setMethod] = useState("Phone");
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
@@ -53,6 +54,21 @@ export default function AppointmentForm() {
       <input name={name} {...attrs} aria-invalid={Boolean(errors[name])} aria-describedby={name + "-error"} />
       <span id={name + "-error"} className="field-error" aria-live="polite">{errors[name]}</span>
     </label>;
+  }
+
+  if (!available) {
+    const links = contactLinks(contact);
+    return <section className="appointment-form unavailable-form" aria-labelledby="appointment-unavailable-title">
+      <div className="form-heading"><span className="eyebrow">Contact us</span>
+        <h2 id="appointment-unavailable-title">Our request form is temporarily unavailable.</h2>
+        <p>We are not collecting requests until secure storage is available. Please contact our care team directly.</p>
+      </div>
+      <div className="contact-lines">
+        <a href={links.phone}>Call {contact.phone}</a>
+        <a href={links.whatsapp} target="_blank" rel="noreferrer">Message us on WhatsApp</a>
+        <a href={links.email}>Email {contact.email}</a>
+      </div>
+    </section>;
   }
 
   return <form id="appointment-form" className="appointment-form" method="post" action="/api/appointments" noValidate onSubmit={submit}

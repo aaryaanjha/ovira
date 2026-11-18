@@ -1,6 +1,6 @@
 import AppointmentForm from "../../../components/AppointmentForm";
 import { ContactLines } from "../../../components/PublicContent";
-import { publicContact } from "../../../lib/store.mjs";
+import { hasPersistentDatabase, publicContact } from "../../../lib/store.mjs";
 import { pageMetadata } from "../../../lib/seo.mjs";
 
 export const metadata = pageMetadata({
@@ -12,6 +12,7 @@ export const metadata = pageMetadata({
 
 export default async function Page() {
   const contact = await publicContact();
+  const formAvailable = hasPersistentDatabase();
   return (
     <main>
       <section className="page-hero wrap">
@@ -21,7 +22,7 @@ export default async function Page() {
       </section>
       <section className="contact-section">
         <div className="wrap appointment-layout">
-          <AppointmentForm />
+          <AppointmentForm available={formAvailable} contact={contact} />
           <aside className="appointment-aside">
             <p className="eyebrow">Contact information</p>
             <h2>{contact.companyName}</h2>
