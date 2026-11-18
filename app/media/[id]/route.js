@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { findMedia } from "../../../lib/store.mjs";
+import { isSupabaseStorageUrl } from "../../../lib/storage.mjs";
 
 export const runtime = "nodejs";
 
@@ -12,7 +13,8 @@ export async function GET(request, context) {
   if (media.url) {
     let remoteUrl;
     try { remoteUrl = new URL(media.url); } catch { return new Response("Not found", { status: 404 }); }
-    if (remoteUrl.protocol !== "https:" || !remoteUrl.hostname.endsWith(".public.blob.vercel-storage.com")) {
+    const trusted = isSupabaseStorageUrl(media.url) || remoteUrl.hostname.endsWith(".public.blob.vercel-storage.com");
+    if (remoteUrl.protocol !== "https:" || !trusted) {
       return new Response("Not found", { status: 404 });
     }
     return Response.redirect(remoteUrl, 302);
