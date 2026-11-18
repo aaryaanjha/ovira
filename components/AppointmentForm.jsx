@@ -8,6 +8,7 @@ export default function AppointmentForm({ available = true, contact }) {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [errors, setErrors] = useState({});
+  const [whatsapp, setWhatsapp] = useState("");
   const id = useRef("");
   const saving = useRef(false);
 
@@ -38,6 +39,16 @@ export default function AppointmentForm({ available = true, contact }) {
       });
       const result = await response.json();
       if (!response.ok || !result.ok) throw new Error(result.error || "Please try again.");
+      if (result.whatsapp) {
+        const lines = ["Hello OVIRA, I would like to book an appointment.", "Name: " + values.name.trim(), "Phone: " + values.phone.trim()];
+        if (values.email) lines.push("Email: " + values.email.trim());
+        lines.push("Preferred contact: " + values.contact);
+        if (values.preferredDate) lines.push("Preferred date: " + values.preferredDate);
+        if (values.preferredTime) lines.push("Preferred time: " + values.preferredTime);
+        if (values.address?.trim()) lines.push("Address: " + values.address.trim());
+        if (values.message?.trim()) lines.push("Message: " + values.message.trim());
+        setWhatsapp(result.whatsapp + "?text=" + encodeURIComponent(lines.join("\n")));
+      }
       setStatus("success");
       form.reset();
       setMethod("Phone");
@@ -105,7 +116,9 @@ export default function AppointmentForm({ available = true, contact }) {
       <button type="submit" className="button button-primary submit-button">{status === "pending" ? "Sending…" : status === "success" ? "Request received ✓" : "Send appointment request ↗"}</button>
     </fieldset>
     <div id="form-status" className={"form-status " + (status === "success" ? "success" : error ? "form-failure" : "")} role="status" aria-live="polite">
-      {status === "success" ? "Thank you. Your appointment request has been received. Our team will get in touch with you shortly." : error}
+      {status === "success" && whatsapp ? <>One last step: tap below to send your request to our team on WhatsApp.{" "}
+        <a className="button button-primary" href={whatsapp} target="_blank" rel="noreferrer">Send on WhatsApp ↗</a></>
+        : status === "success" ? "Thank you. Your appointment request has been received. Our team will get in touch with you shortly." : error}
     </div>
   </form>;
 }
