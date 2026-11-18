@@ -1,6 +1,7 @@
 import { mkdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
+import { del as deleteBlob, put } from "@vercel/blob";
 import { sessionName, validSession } from "../../../../lib/auth.mjs";
 import {
   addMedia, adminAnalytics, adminAppointments, adminLeads, adminMedia, adminMyths, adminPosts, publicContact,
@@ -64,6 +65,17 @@ async function uploadImage(request) {
   if (!mimeType) throw new InputError("Upload a valid JPG, PNG, or WebP image.");
   const id = randomUUID();
   const fileName = path.basename(file.name || "image").replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 140) || "image";
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const blob = await put(fileName, bytes, { access: "public", contentType: mimeType, addRandomSuffix: true });
+    try {
+      const media = await addMedia({ id, fileName, mimeType, size: bytes.length, url: blob.url });
+      return json({ data: { ...media, url: "/media/" + media.id } }, 201);
+    } catch (error) {
+      await deleteBlob(blob.url);
+      throw error;
+    }
+  }
+  if (process.env.VERCEL === "1") throw new Error("Configure BLOB_READ_WRITE_TOKEN before enabling image uploads.");
   const media = await addMedia({ id, fileName, mimeType, size: bytes.length });
   const directory = path.join(process.cwd(), ".data", "media");
   const destination = path.join(directory, media.id);
@@ -104,7 +116,8 @@ async function handle(request, context) {
       const data = await body(request, 2000);
       if (resource === "media") {
         const media = await deleteMedia(data.id);
-        await unlink(path.join(process.cwd(), ".data", "media", media.id)).catch(error => {
+        if (media.url) await deleteBlob(media.url);
+        else await unlink(path.join(process.cwd(), ".data", "media", media.id)).catch(error => {
           if (error.code !== "ENOENT") throw error;
         });
         return json({ data: true });

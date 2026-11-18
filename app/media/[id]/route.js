@@ -9,6 +9,14 @@ export async function GET(request, context) {
   if (!/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(id)) return new Response("Not found", { status: 404 });
   const media = await findMedia(id);
   if (!media || !["image/jpeg", "image/png", "image/webp"].includes(media.mimeType)) return new Response("Not found", { status: 404 });
+  if (media.url) {
+    let remoteUrl;
+    try { remoteUrl = new URL(media.url); } catch { return new Response("Not found", { status: 404 }); }
+    if (remoteUrl.protocol !== "https:" || !remoteUrl.hostname.endsWith(".public.blob.vercel-storage.com")) {
+      return new Response("Not found", { status: 404 });
+    }
+    return Response.redirect(remoteUrl, 302);
+  }
   try {
     const bytes = await readFile(path.join(process.cwd(), ".data", "media", media.id));
     return new Response(bytes, { headers: {

@@ -9,8 +9,10 @@
     "admin:password": "node scripts/admin-password.mjs",
     "admin:secret": "node -e \"console.log(require('node:crypto').randomBytes(32).toString('hex'))\""
   },
-  "engines": { "node": ">=22.13" },
+  "engines": { "node": "24.x" },
   "dependencies": {
+    "@neondatabase/serverless": "^1.2.1",
+    "@vercel/blob": "^2.9.0",
     "next": "^16.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"

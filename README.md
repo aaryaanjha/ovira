@@ -1,6 +1,6 @@
 # OVIRA
 
-OVIRA is a Next.js fertility-care website with a protected admin panel at `/admin`. Public blogs, Myths & Facts, testimonials, homepage slides, contact information, and social links share the admin panel's SQLite content store.
+OVIRA is a Next.js fertility-care website with a protected admin panel at `/admin`. Public blogs, Myths & Facts, testimonials, homepage slides, contact information, and social links share the admin panel's content store.
 
 ## Run locally
 
@@ -18,9 +18,11 @@ Set `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, and `ADMIN_SESSION_SECRET` in `.env
 
 ## Data and deployment
 
-The SQLite database and uploaded images are stored under `.data/` by default. Keep this directory on persistent storage and include it in protected backups; it contains appointment and contact information. `OVIRA_DB_PATH` can change the database file location.
+Local development uses SQLite at `.data/ovira.sqlite` and stores uploads under `.data/media/`. Keep these files on persistent storage and include them in protected backups; the database contains appointment and contact information. `OVIRA_DB_PATH` can change the database file location.
 
-For production, deploy to a Node.js host with persistent storage, use HTTPS, and set `APP_ORIGIN` to the exact public origin (for example, `https://your-domain.example`). The admin uses a signed, HttpOnly session cookie that expires after eight hours. Rotating the password hash or session secret invalidates existing sessions. Use a single application instance for SQLite and configure host-level rate limits; set `TRUSTED_CLIENT_IP_HEADER` only when a trusted proxy overwrites that header.
+For Vercel, connect a Neon Postgres database and Vercel Blob storage to the project. Set `DATABASE_URL` (or `POSTGRES_URL`) to the pooled Neon connection string; the app creates its schema and seeds the starter content on first use. Vercel Blob supplies `BLOB_READ_WRITE_TOKEN` for admin image uploads. Set `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `ADMIN_SESSION_SECRET`, and `APP_ORIGIN` in the Vercel Production environment, then redeploy. The local SQLite database and uploaded files are not copied automatically to Neon or Blob; transfer them deliberately if needed, and do not commit `.data/`.
+
+On other production hosts, SQLite and uploads can remain under `.data/` if the host provides persistent storage. Use HTTPS and set `APP_ORIGIN` to the exact public origin. The admin uses a signed, HttpOnly session cookie that expires after eight hours. Rotating the password hash or session secret invalidates existing sessions. Use a single application instance for SQLite and configure host-level rate limits; set `TRUSTED_CLIENT_IP_HEADER` only when a trusted proxy overwrites that header.
 
 Before deployment, run `npm run build` and `npm start`. Verify that a test appointment appears in Leads and Appointments, update its status, publish a test blog, and confirm published content and contact changes appear on the public site. Do not enter medical information in the appointment form or staff notes.
 
