@@ -7,7 +7,6 @@ export default function MythQuestionForm({ available = true }) {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [errors, setErrors] = useState({});
-  const [whatsapp, setWhatsapp] = useState("");
   const id = useRef("");
   const saving = useRef(false);
 
@@ -57,11 +56,6 @@ export default function MythQuestionForm({ available = true }) {
       });
       const result = await response.json();
       if (!response.ok || !result.ok) throw new Error(result.error || "Please try again.");
-      if (result.whatsapp) {
-        const text = ["Hello OVIRA, I have a question.", "Name: " + values.name.trim(), "Phone: " + values.phone.trim(),
-          "Question: " + values.question.trim()].join("\n");
-        setWhatsapp(result.whatsapp + "?text=" + encodeURIComponent(text));
-      }
       setStatus("success");
       form.reset();
     } catch (submitError) {
@@ -112,9 +106,7 @@ export default function MythQuestionForm({ available = true }) {
         </button>
       </fieldset>
       <div className={"form-status " + (status === "success" ? "success" : error ? "form-failure" : "")} role="status" aria-live="polite">
-        {status === "success" && whatsapp ? <>One last step: tap below to send your question to our team on WhatsApp.{" "}
-          <a className="button button-primary" href={whatsapp} target="_blank" rel="noreferrer">Send on WhatsApp ↗</a></>
-          : status === "success" ? "Thank you. Your question has been received, and our team will be in touch." : error}
+        {status === "success" ? "Thank you. Your question has been received, and our team will be in touch." : error}
       </div>
     </form>}
   </section>;
