@@ -36,7 +36,7 @@ Before deployment, run `npm run build` and `npm start`. Verify that a test appoi
 
 ## Deploy on Vercel with Supabase
 
-1. **Create the database.** In Supabase, open your project → **SQL Editor** → **New query**, paste all of [`supabase/setup.sql`](supabase/setup.sql) and click **Run**. It creates the tables, turns on row-level security, adds the starter articles, myths, slides and contact details, and creates the public `ovira-media` image bucket. Running it again is safe.
+1. **Create the database and image storage.** In Supabase, open your project → **SQL Editor** → **New query**, paste all of [`supabase/setup.sql`](supabase/setup.sql) and click **Run**. It creates the tables, applies the image-metadata compatibility migration, turns on row-level security, adds starter articles, myths, slides and contact details, and creates the public `ovira-media` image bucket. PostgreSQL stores editable content, leads, appointments, and image metadata; Supabase Storage stores uploaded image files. Running the SQL again is safe.
 2. **Create the admin login.** Run `npm run admin:password -- "your strong password"` (12+ characters). It prints `ADMIN_PASSWORD_HASH` and `ADMIN_SESSION_SECRET`.
 3. **Add environment variables** in Vercel → Project → **Settings** → **Environment Variables** (Production and Preview):
 
@@ -45,13 +45,14 @@ Before deployment, run `npm run build` and `npm start`. Verify that a test appoi
    | `DATABASE_URL` | Supabase → **Connect** → **Transaction pooler** connection string (port 6543), with your database password filled in |
    | `SUPABASE_URL` | Supabase → Project Settings → **API** → Project URL |
    | `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → **API** → `service_role` secret key (never share it or expose it in the browser) |
+   | `SUPABASE_STORAGE_BUCKET` | Optional; use `ovira-media` to match the bucket created by the SQL |
    | `ADMIN_USERNAME` | Any login name you choose, for example `admin` |
    | `ADMIN_PASSWORD_HASH` | From step 2 |
    | `ADMIN_SESSION_SECRET` | From step 2 |
    | `APP_ORIGIN` | Your live site address, for example `https://www.ovirascience.com` (no trailing slash) |
 
 4. **Redeploy** from Vercel → Deployments → ⋯ → **Redeploy**.
-5. **Check it:** send a test request from `/appointment`, sign in at `/admin` and confirm it appears under Leads and Appointments, then upload a test image under Media.
+5. **Check it:** send a test request from `/appointment`, sign in at `/admin` and confirm it appears under Leads and Appointments. Upload an image under Media, verify it displays on the site, then edit and publish a test post to confirm database and Storage work together.
 
 If `DATABASE_URL` is missing on Vercel, the pages still load from built-in content. Appointment requests can still be stored in Google Sheets when the Sheets credentials are configured; otherwise the form offers direct contact options and the admin panel cannot save changes.
 

@@ -32,15 +32,18 @@ begin;
 -- 1. Tables
 ${createTables.join("\n\n")}
 
--- 2. Lock tables away from the public Supabase API.
+-- 2. Additive migrations for databases created by earlier OVIRA versions.
+ALTER TABLE public.media ADD COLUMN IF NOT EXISTS "url" TEXT NOT NULL DEFAULT '';
+
+-- 3. Lock tables away from the public Supabase API.
 -- The website connects with DATABASE_URL (the postgres role), which is not affected by RLS.
 -- With RLS on and no policies, the anon key cannot read leads or appointments.
 ${tables.map(table => `alter table public.${table} enable row level security;`).join("\n")}
 
--- 3. Starter content (blog articles, myths, homepage slides, contact details)
+-- 4. Starter content (blog articles, myths, homepage slides, contact details)
 ${seedStatements().map(statement => inline(statement) + ";").join("\n\n")}
 
--- 4. Public bucket for images uploaded from the admin panel (JPG, PNG, WebP up to 5 MB)
+-- 5. Public bucket for images uploaded from the admin panel (JPG, PNG, WebP up to 5 MB)
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('ovira-media', 'ovira-media', true, 5242880, array['image/jpeg', 'image/png', 'image/webp'])
 on conflict (id) do update set public = true, file_size_limit = excluded.file_size_limit,
