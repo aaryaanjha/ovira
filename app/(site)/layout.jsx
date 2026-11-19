@@ -15,14 +15,20 @@ export default async function SiteLayout({ children }) {
       {
         "@type": "Organization",
         "@id": organizationId,
-        name: "OVIRASCIENCE",
-        alternateName: "OVIRA",
+        name: "OVIRA",
+        alternateName: "OVIRASCIENCE",
         legalName: contact.companyName,
         url: siteUrl("/"),
         logo: { "@type": "ImageObject", url: siteUrl("/assets/ovira-logo.png") },
         email: contact.email,
         telephone: contact.phone,
         address: { "@type": "PostalAddress", streetAddress: contact.address, addressCountry: "IN" },
+        contactPoint: {
+          "@type": "ContactPoint",
+          contactType: "customer support",
+          telephone: contact.phone,
+          email: contact.email,
+        },
         sameAs: socials.map(social => social.url),
       },
       {

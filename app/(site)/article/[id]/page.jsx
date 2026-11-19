@@ -21,7 +21,6 @@ export async function generateMetadata({ params }) {
       title,
       description,
       path: url,
-      keywords: [article.title, article.category, "fertility care", "OVIRA"],
     }),
     openGraph: {
       type: "article",
@@ -58,7 +57,7 @@ export default async function Article({ params }) {
         image: article.featuredImage ? [siteUrl(article.featuredImage)] : undefined,
         datePublished: article.publishedAt || undefined,
         dateModified: article.updatedAt || article.publishedAt || undefined,
-        author: { "@type": "Organization", name: article.author || "OVIRA", url: siteUrl("/") },
+        author: { "@type": "Organization", "@id": organizationId, name: "OVIRA", url: siteUrl("/about") },
         publisher: { "@id": organizationId },
         mainEntityOfPage: { "@type": "WebPage", "@id": url },
         inLanguage: "en-IN",

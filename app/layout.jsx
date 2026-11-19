@@ -20,11 +20,10 @@ const cormorantGaramond = Cormorant_Garamond({
 export const metadata = {
   metadataBase: new URL(siteUrl("/")),
   title: { default: "Fertility Care & IVF Guidance", template: "%s | OVIRA" },
-  description: "Explore compassionate fertility care, IVF guidance, and clear answers to common fertility questions from OVIRA.",
+  description: "Explore compassionate fertility information, IVF guidance, and clear answers to common questions from OVIRA.",
   applicationName: "OVIRA",
   publisher: "OVIRA",
   category: "Fertility care",
-  keywords: ["fertility care", "IVF guidance", "fertility treatment", "infertility support", "IVF myths and facts"],
   alternates: { canonical: "/" },
   robots: {
     index: true,
@@ -38,7 +37,7 @@ export const metadata = {
     title: "Fertility Care & IVF Guidance | OVIRA",
     description: "Explore compassionate fertility care, IVF guidance, and clear answers to common fertility questions from OVIRA.",
     url: "/",
-    images: [{ url: "/assets/ovira-share.jpg", width: 1200, height: 630, alt: "OVIRASCIENCE fertility care and IVF guidance" }],
+    images: [{ url: "/assets/ovira-share.jpg", width: 1200, height: 630, alt: "OVIRA fertility care and IVF information" }],
   },
   twitter: {
     card: "summary_large_image",

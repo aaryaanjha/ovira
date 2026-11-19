@@ -3,7 +3,7 @@ import { siteUrl } from "../lib/seo.mjs";
 
 export const dynamic = "force-dynamic";
 
-const publicPages = ["/", "/blogs", "/myths", "/appointment", "/privacy", "/terms"];
+const publicPages = ["/", "/about", "/blogs", "/myths", "/appointment", "/privacy", "/terms"];
 
 export default async function sitemap() {
   const articles = await publicArticles();

@@ -4,13 +4,15 @@ OVIRA is a Next.js fertility-care website with a protected admin panel at `/admi
 
 ## Run locally
 
-Requires Node.js 22.13 or newer.
+Requires Node.js 24.x.
 
 ```powershell
 npm install
 Copy-Item .env.example .env.local
 npm run dev
 ```
+
+The local development command uses Webpack to avoid Turbopack persistence-cache failures in synced Windows folders such as OneDrive. Production builds remain unchanged.
 
 Open http://localhost:3000 for the website or http://localhost:3000/admin for the admin panel.
 
@@ -21,6 +23,12 @@ Set `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, and `ADMIN_SESSION_SECRET` in `.env
 Local development uses SQLite at `.data/ovira.sqlite` and stores uploads under `.data/media/`. Keep these files on persistent storage and include them in protected backups; the database contains appointment and contact information. `OVIRA_DB_PATH` can change the database file location.
 
 For Vercel, connect a Neon Postgres database and Vercel Blob storage to the project. Set `DATABASE_URL` (or `POSTGRES_URL`) to the pooled Neon connection string; the app creates its schema and seeds the starter content on first use. Vercel Blob supplies `BLOB_READ_WRITE_TOKEN` for admin image uploads. Set `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `ADMIN_SESSION_SECRET`, and `APP_ORIGIN` in the Vercel Production environment, then redeploy. The local SQLite database and uploaded files are not copied automatically to Neon or Blob; transfer them deliberately if needed, and do not commit `.data/`.
+
+### Google Sheets for appointments
+
+Google Sheets can store appointment requests and provide the Admin dashboard's Leads and Appointments views when a database is unavailable. Create a Google service account, enable the Google Sheets API, and share the spreadsheet with the service account's email as an editor. Set `GOOGLE_SHEET_ID`, `GOOGLE_CLIENT_EMAIL`, and `GOOGLE_PRIVATE_KEY` in the hosting provider's environment settings; keep the private key secret and never add it to Git or send it in chat. With no database, Sheets is selected automatically. If a database is also configured, set `OVIRA_APPOINTMENT_STORAGE=google-sheets` to select Sheets for leads and appointments.
+
+Put the Google variables in your private `.env.local` file, then run `npm run sheets:setup` from a trusted local environment to create or safely extend the workbook's `Leads`, `Posts`, and `Settings` tabs. Existing lead rows are preserved while the appointment columns are added. In Sheets-only mode, admin sign-in still requires `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `ADMIN_SESSION_SECRET`, and `APP_ORIGIN`; only Analytics, Leads, Appointments, and Admin profile are available, while other website content management requires a database. Set the environment variables in Vercel and redeploy after setup. Appointment and contact data is sensitive: limit spreadsheet access to authorized staff and do not collect medical information in the form or staff notes.
 
 On other production hosts, SQLite and uploads can remain under `.data/` if the host provides persistent storage. Use HTTPS and set `APP_ORIGIN` to the exact public origin. The admin uses a signed, HttpOnly session cookie that expires after eight hours. Rotating the password hash or session secret invalidates existing sessions. Use a single application instance for SQLite and configure host-level rate limits; set `TRUSTED_CLIENT_IP_HEADER` only when a trusted proxy overwrites that header.
 

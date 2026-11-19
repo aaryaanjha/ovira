@@ -11,12 +11,12 @@ export default function SiteFooter({ contact, socials = [] }) {
               <span className="brand-mark"><img src="/assets/ovira-logo.png" alt="" width="40" height="40" /></span>
               <span className="brand-word">OVIRA<small>Life Begins Here</small></span>
             </a>
-            <p>Compassionate fertility guidance, thoughtful science, and personal support for every journey.</p>
+            <p>Fertility information, thoughtful science, and support for every journey.</p>
           </div>
           <div className="footer-column">
             <h3>Explore</h3>
             <a href="/">Home</a><a href="/myths">Myths &amp; Facts</a><a href="/blogs">Blogs</a>
-            <a href="/#testimonials">Testimonials</a><a href="/#about">About OVIRA</a>
+            <a href="/about">About OVIRA</a>
           </div>
           <div className="footer-column">
             <h3>Get in touch</h3>
@@ -36,7 +36,7 @@ export default function SiteFooter({ contact, socials = [] }) {
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© 2026 OVIRASCIENCE. All rights reserved.</span>
+          <span>© 2026 OVIRA. All rights reserved.</span>
           <span className="footer-legal"><a href="/terms">Terms &amp; Conditions</a><a href="/privacy">Privacy Policy</a></span>
         </div>
       </div>

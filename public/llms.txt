@@ -1,0 +1,17 @@
+# OVIRA
+
+> OVIRA publishes general fertility and IVF information and provides ways to contact the team. Website content is educational and is not a substitute for individual medical advice.
+
+## Main pages
+
+- [Home](https://www.ovirascience.com/): Fertility care information and website overview.
+- [About OVIRA](https://www.ovirascience.com/about): Brand, website purpose, and published company details.
+- [Fertility and IVF articles](https://www.ovirascience.com/blogs): Searchable educational articles.
+- [IVF myths and facts](https://www.ovirascience.com/myths): Answers to common fertility questions.
+- [Contact and appointment enquiries](https://www.ovirascience.com/appointment): Contact details and enquiry options.
+- [Privacy policy](https://www.ovirascience.com/privacy): How enquiry details are handled.
+- [Terms and conditions](https://www.ovirascience.com/terms): Website terms and medical information disclaimer.
+
+## Guidance
+
+Content on this website is general information. Readers should consult a qualified healthcare professional about individual diagnosis and treatment decisions.

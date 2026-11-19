@@ -1,20 +1,27 @@
 import AppointmentForm from "../../../components/AppointmentForm";
+import JsonLd from "../../../components/JsonLd";
 import { ContactLines } from "../../../components/PublicContent";
-import { hasPersistentDatabase, publicContact } from "../../../lib/store.mjs";
-import { pageMetadata } from "../../../lib/seo.mjs";
+import { hasAppointmentStorage, publicContact } from "../../../lib/store.mjs";
+import { pageMetadata, siteUrl } from "../../../lib/seo.mjs";
 
 export const metadata = pageMetadata({
   title: "Contact OVIRA Fertility Care",
   description: "Contact OVIRA with questions or request a fertility care appointment. Our team can help you understand possible next steps.",
   path: "/appointment",
-  keywords: ["contact OVIRA", "fertility care appointment", "fertility consultation"],
 });
 
 export default async function Page() {
   const contact = await publicContact();
-  const formAvailable = hasPersistentDatabase();
+  const formAvailable = hasAppointmentStorage();
+  const contactPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: "Contact OVIRA Fertility Care",
+    url: siteUrl("/appointment"),
+    mainEntity: { "@id": siteUrl("/#organization") },
+  };
   return (
-    <main>
+    <main><JsonLd data={contactPageSchema} />
       <section className="page-hero wrap">
         <p className="eyebrow">A thoughtful first step</p>
         <h1>Start your fertility care<br /><em>conversation.</em></h1>
@@ -35,6 +42,16 @@ export default async function Page() {
             <p className="privacy-note">Your details are kept private and used only to respond to your request.</p>
           </aside>
         </div>
+      </section>
+      <section className="wrap appointment-expectations">
+        <p className="eyebrow">A thoughtful first step</p>
+        <h2>What happens after you reach out?</h2>
+        <div className="appointment-expectations-grid">
+          <article><h3>1. Choose how to connect</h3><p>Share your contact preference and, if helpful, a preferred date or time for a conversation.</p></article>
+          <article><h3>2. We follow up</h3><p>Our team will use the details you provide to respond. Availability and timing are confirmed directly with you.</p></article>
+          <article><h3>3. Decide on next steps</h3><p>A request is not a confirmed appointment or medical advice. You can ask questions before deciding what to do next.</p></article>
+        </div>
+        <p className="appointment-expectations-note">Please do not include medical records or sensitive health information in an initial enquiry.</p>
       </section>
     </main>
   );

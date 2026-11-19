@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "admin:password": "node scripts/admin-password.mjs",
-    "admin:secret": "node -e \"console.log(require('node:crypto').randomBytes(32).toString('hex'))\""
+    "admin:secret": "node -e \"console.log(require('node:crypto').randomBytes(32).toString('hex'))\"",
+    "sheets:setup": "node --env-file=.env.local scripts/setup-sheets.mjs"
   },
   "engines": { "node": "24.x" },
   "dependencies": {

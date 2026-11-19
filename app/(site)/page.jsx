@@ -1,4 +1,3 @@
-import Carousel from "../../components/Carousel";
 import IVFCycle from "../../components/IVFCycle";
 import { ArticleCard, ContactRibbon, MythPreview } from "../../components/PublicContent";
 import { publicArticles, publicContact, publicMyths, publicSlides, publicTestimonials } from "../../lib/store.mjs";
@@ -6,24 +5,29 @@ import { pageMetadata } from "../../lib/seo.mjs";
 
 export const metadata = pageMetadata({
   title: "Fertility Care & IVF Guidance",
-  description: "Explore compassionate fertility care, IVF guidance, and clear answers to common fertility questions from the OVIRA care team.",
+  description: "Explore compassionate fertility information, IVF guidance, and clear answers to common questions from OVIRA.",
   path: "/",
-  keywords: ["fertility care", "IVF guidance", "fertility support", "IVF treatment information", "fertility questions"],
 });
 
 export default async function Home() {
   const [articles, contact, myths, slides, testimonials] = await Promise.all([
     publicArticles(), publicContact(), publicMyths(), publicSlides(), publicTestimonials(),
   ]);
+  const heroSlide = slides[0] || {
+    image: "/assets/ivf-consultation.webp",
+    alt: "Fertility specialist listening during a consultation",
+    caption: "Care that begins by listening",
+  };
+  const wellbeingArticle = articles.find(article => article.id === "supporting-wellbeing");
   return (
     <main>
       <section className="hero wrap" id="home">
         <div className="hero-copy">
           <p className="eyebrow"><span className="eyebrow-dot" /> Fertility care, made personal</p>
           <h1>Fertility care<br />that starts with <em>you.</em></h1>
-          <p className="hero-lead">Expert fertility guidance, thoughtful science, and a team beside you at every step of your journey.</p>
+          <p className="hero-lead">Clear fertility information, thoughtful science, and support for your next conversation.</p>
           <div className="hero-actions">
-            <a className="button button-primary" href="/appointment">Book your appointment <span aria-hidden="true">↗</span></a>
+            <a className="button button-primary" href="/appointment">Contact our care team <span aria-hidden="true">↗</span></a>
             <a className="text-link" href="/myths">Explore fertility facts <span aria-hidden="true">→</span></a>
           </div>
           <div className="hero-proof">
@@ -31,7 +35,11 @@ export default async function Home() {
             <p><strong>A little more hope, a lot more support.</strong><br />Care that starts by listening.</p>
           </div>
         </div>
-        <Carousel slides={slides} />
+        <figure className="hero-art hero-feature">
+          <img className="hero-photo" src={heroSlide.image} alt={heroSlide.alt} width="1200" height="900"
+            loading="eager" fetchPriority="high" decoding="async" />
+          <figcaption>{heroSlide.caption}</figcaption>
+        </figure>
       </section>
 
       <ContactRibbon contact={contact} />
@@ -61,7 +69,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="section wrap testimonials" id="testimonials">
+      {testimonials.length > 0 && <section className="section wrap testimonials" id="testimonials">
         <div className="testimonial-heading">
           <p className="eyebrow">Testimonials</p>
           <h2>Care that stays<br />with <em>you.</em></h2>
@@ -77,9 +85,8 @@ export default async function Home() {
               {testimonial.rating && <span className="quote-stars" aria-label={testimonial.rating + " out of 5 stars"}>{"★".repeat(testimonial.rating)}</span>}
             </div>
           </article>)}
-          {!testimonials.length && <div className="quote-card testimonial-empty"><p>We look forward to sharing feedback from our community here.</p><a className="text-link" href="/appointment">Talk with our care team <span aria-hidden="true">→</span></a></div>}
         </div>
-      </section>
+      </section>}
 
       <section className="section about-section" id="about">
         <div className="wrap about-grid">
@@ -88,14 +95,15 @@ export default async function Home() {
           </div>
           <div className="about-copy">
             <p className="eyebrow">A better kind of care</p>
-            <h2>Expert care can<br />feel <em>human, too.</em></h2>
-            <p>At OVIRA, we believe the best care begins with listening. Our team brings reproductive expertise together with clear communication and respect for the person behind every question.</p>
+            <h2>Fertility information<br />with <em>a human touch.</em></h2>
+            <p>We believe fertility conversations should begin with listening, clear explanations, and respect. Our resources aim to help you prepare questions and understand general topics.</p>
             <div className="value-list">
               <div><span>01</span><p><b>Compassion, first</b><small>Your questions and feelings belong in the room.</small></p></div>
-              <div><span>02</span><p><b>Guided by science</b><small>Thoughtful recommendations grounded in your needs.</small></p></div>
-              <div><span>03</span><p><b>One step at a time</b><small>Clear options and support at every stage.</small></p></div>
+              <div><span>02</span><p><b>Clear information</b><small>Plain-language explanations of common topics.</small></p></div>
+              <div><span>03</span><p><b>One step at a time</b><small>Use each resource to prepare for your next conversation.</small></p></div>
             </div>
-            <a className="button button-outline" href="/appointment">Meet with our care team <span aria-hidden="true">→</span></a>
+            <a className="button button-outline" href="/appointment">Ask the care team a question <span aria-hidden="true">→</span></a>
+            {wellbeingArticle && <p><a className="text-link" href={"/article/" + encodeURIComponent(wellbeingArticle.slug || wellbeingArticle.id)}>Read about supporting your wellbeing <span aria-hidden="true">→</span></a></p>}
           </div>
         </div>
       </section>
@@ -106,7 +114,7 @@ export default async function Home() {
           <div className="mission-card">
             <span className="mission-icon" aria-hidden="true">✳</span>
             <p className="eyebrow">Our mission</p>
-            <p>To make fertility care more personal through expert guidance, modern reproductive science, and compassionate support from the first conversation onward.</p>
+            <p>To make fertility information easier to navigate through clear explanations and compassionate support.</p>
             <a href="/appointment">Let’s talk about your next step <span aria-hidden="true">→</span></a>
           </div>
         </div>
@@ -115,7 +123,7 @@ export default async function Home() {
       <section className="closing-cta">
         <div className="wrap closing-inner">
           <div><p className="eyebrow">You don’t have to have it all figured out</p><h2>Start with a<br /><em>conversation.</em></h2></div>
-          <a className="button button-light" href="/appointment">Book your appointment <span aria-hidden="true">↗</span></a>
+          <a className="button button-light" href="/appointment">Get in touch with OVIRA <span aria-hidden="true">↗</span></a>
           <div className="closing-flower" aria-hidden="true">✿</div>
         </div>
       </section>

@@ -7,6 +7,16 @@ const byName = new Map(sheets.map(sheet => [sheet.properties.title, sheet.proper
 let nextSheetId = Math.max(0, ...byName.values()) + 1;
 const requests = [];
 
+function columnName(number) {
+  let name = "";
+  while (number) {
+    number--;
+    name = String.fromCharCode(65 + number % 26) + name;
+    number = Math.floor(number / 26);
+  }
+  return name;
+}
+
 const seed = {
   Leads: [],
   Posts: initialPosts.map(post => ({ ...post, sections: JSON.stringify(post.sections) })),
@@ -16,10 +26,17 @@ const seed = {
 for (const [tab, fields] of Object.entries(columns)) {
   let sheetId = byName.get(tab);
   if (sheetId !== undefined) {
-    const { values = [] } = await google("/values/" + encodeURIComponent(tab + "!A1:" + String.fromCharCode(64 + fields.length)));
+    const { values = [] } = await google("/values/" + encodeURIComponent(tab + "!A1:" + columnName(fields.length)));
     if (values.length) {
-      if (!fields.every((field, index) => values[0]?.[index] === field)) {
+      const headers = values[0] || [];
+      if (headers.length > fields.length || !headers.every((field, index) => field === fields[index])) {
         throw new Error("The " + tab + " tab already contains a different schema. Use a blank workbook or restore its expected headers.");
+      }
+      if (headers.length < fields.length) {
+        const firstColumn = columnName(headers.length + 1);
+        const lastColumn = columnName(fields.length);
+        await google("/values/" + encodeURIComponent(tab + "!" + firstColumn + "1:" + lastColumn + "1") +
+          "?valueInputOption=RAW", "PUT", { values: [fields.slice(headers.length)] });
       }
       continue;
     }

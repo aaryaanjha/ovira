@@ -55,10 +55,12 @@ export function ArticleView({ article, related, index }) {
 }
 
 export function MythPreview({ item, index }) {
+  const twinsGuide = /twins|multiple pregnancies/i.test(item.myth);
   return <details className="myth-card myth-preview-card">
     <summary><span className="myth-number">{String(index + 1).padStart(2, "0")}</span><span><span className="myth-label">Myth</span>{item.myth}</span><span className="plus" aria-hidden="true">+</span></summary>
     <p><b>Fact:</b> {item.fact}</p>
     {item.more && <p>{item.more}</p>}
+    {twinsGuide && <a className="myth-guide-link" href="/article/myth-multiple-pregnancy">Read our guide to twins and fertility treatment →</a>}
   </details>;
 }
 

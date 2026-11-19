@@ -17,14 +17,19 @@ const groups = [
   { title: "Settings", items: [["profile", "Admin profile"]] },
 ];
 const titles = Object.fromEntries(groups.flatMap(group => group.items));
+const sheetsOnlyGroups = groups.map(group => ({
+  ...group,
+  items: group.items.filter(([key]) => ["analytics", "leads", "appointments", "profile"].includes(key)),
+})).filter(group => group.items.length);
 
-export default function Dashboard({ username }) {
+export default function Dashboard({ username, sheetsOnly = false }) {
   const [tab, setTab] = useState("analytics");
   const [loaded, setLoaded] = useState(null);
   const [revision, setRevision] = useState(0);
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
+  const visibleGroups = sheetsOnly ? sheetsOnlyGroups : groups;
   const data = loaded?.tab === tab && loaded.revision === revision ? loaded.data : undefined;
 
   useEffect(() => {
@@ -94,7 +99,7 @@ export default function Dashboard({ username }) {
     <aside className="admin-sidebar">
       <a className="admin-brand" href="/admin"><img src="/assets/ovira-logo.png" alt="" width="38" height="38" /> OVIRA <small>Admin</small></a>
       <nav className="admin-side-nav" aria-label="Admin panel">
-        {groups.map(group => <section key={group.title}>
+        {visibleGroups.map(group => <section key={group.title}>
           <h2>{group.title}</h2>
           {group.items.map(([key, label]) => <button type="button" key={key} className={tab === key ? "active" : ""}
             aria-current={tab === key ? "page" : undefined} onClick={() => { setTab(key); setNotice(""); setError(""); }}>
@@ -118,6 +123,7 @@ export default function Dashboard({ username }) {
         <div><p className="admin-kicker">OVIRA · ADMIN</p><h1>{titles[tab]}</h1></div>
         <button type="button" className="admin-button quiet" disabled={saving || tab === "profile"} onClick={refresh}>Refresh</button>
       </header>
+      {sheetsOnly && <p className="admin-notice" role="status">Appointment and lead records are stored in the connected Google Sheet. Website content management requires a database.</p>}
       {error && <p className="admin-error" role="alert">{error}</p>}
       {notice && <p className="admin-notice" role="status">{notice}</p>}
       {tab !== "profile" && data === undefined && <div className="admin-panel" role="status">Loading {titles[tab].toLowerCase()}…</div>}
@@ -135,7 +141,7 @@ export default function Dashboard({ username }) {
         {tab === "socials" && data && <SocialManager items={data} save={values => save("socials", values)} remove={remove} />}
         {tab === "profile" && <AdminProfile username={username} />}
       </fieldset>
-      <footer className="admin-main-footer"><span>OVIRA Admin</span><span>Changes publish to the website when saved.</span></footer>
+      <footer className="admin-main-footer"><span>OVIRA Admin</span><span>{sheetsOnly ? "Appointment and lead changes are saved to Google Sheets." : "Changes publish to the website when saved."}</span></footer>
     </main>
   </div>;
 }

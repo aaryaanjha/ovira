@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 
-const links = [["Home", "/"], ["Myths & Facts", "/myths"], ["Blogs", "/blogs"], ["Testimonials", "/#testimonials"], ["About", "/#about"], ["Contact Us", "/appointment"]];
+const links = [["Home", "/"], ["Myths & Facts", "/myths"], ["Blogs", "/blogs"], ["About", "/about"], ["Contact Us", "/appointment"]];
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
