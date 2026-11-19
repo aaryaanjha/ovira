@@ -8,6 +8,7 @@ const redirects = [
 
 export default {
   poweredByHeader: false,
+  serverExternalPackages: ["postgres"],
   turbopack: { root: dirname(fileURLToPath(import.meta.url)) },
   async redirects() { return redirects; },
   async headers() {
