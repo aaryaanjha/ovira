@@ -3,6 +3,7 @@ import path from "node:path";
 import { randomUUID } from "node:crypto";
 import { del as deleteBlob, put } from "@vercel/blob";
 import { sessionName, validSession } from "../../../../lib/auth.mjs";
+import { deleteFromSupabase, isSupabaseStorageUrl, supabaseStorageConfigured, uploadToSupabase } from "../../../../lib/storage.mjs";
 import {
   addMedia, adminAnalytics, adminAppointments, adminLeads, adminMedia, adminMyths, adminPosts, publicContact,
   adminSlides, adminSocials, adminTestimonials, deleteMedia, deleteMyth, deletePost, deleteSlide,
@@ -10,6 +11,7 @@ import {
   saveSlide, saveSocial, saveTestimonial, InputError,
 } from "../../../../lib/store.mjs";
 import { body, failure, json, limited, rejectOrigin } from "../../../../lib/http.mjs";
+import { hasPersistentDatabase } from "../../../../lib/database.mjs";
 
 const readers = {
   analytics: adminAnalytics,
@@ -65,6 +67,16 @@ async function uploadImage(request) {
   if (!mimeType) throw new InputError("Upload a valid JPG, PNG, or WebP image.");
   const id = randomUUID();
   const fileName = path.basename(file.name || "image").replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 140) || "image";
+  if (supabaseStorageConfigured()) {
+    const url = await uploadToSupabase(id, fileName, bytes, mimeType);
+    try {
+      const media = await addMedia({ id, fileName, mimeType, size: bytes.length, url });
+      return json({ data: { ...media, url: "/media/" + media.id } }, 201);
+    } catch (error) {
+      await deleteFromSupabase(url).catch(() => {});
+      throw error;
+    }
+  }
   if (process.env.BLOB_READ_WRITE_TOKEN) {
     const blob = await put(fileName, bytes, { access: "public", contentType: mimeType, addRandomSuffix: true });
     try {
@@ -75,7 +87,7 @@ async function uploadImage(request) {
       throw error;
     }
   }
-  if (process.env.VERCEL === "1") throw new Error("Configure BLOB_READ_WRITE_TOKEN before enabling image uploads.");
+  if (process.env.VERCEL === "1") throw new InputError("Image uploads need SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Vercel.");
   const media = await addMedia({ id, fileName, mimeType, size: bytes.length });
   const directory = path.join(process.cwd(), ".data", "media");
   const destination = path.join(directory, media.id);
@@ -98,6 +110,9 @@ async function handle(request, context) {
   const write = method !== "GET";
   if (write && rejectOrigin(request)) return json({ error: "Invalid request origin." }, 403);
   if (write && limited(request, "admin-writes", 120, 60000)) return json({ error: "Too many changes. Wait a minute and try again." }, 429);
+  if (write && !hasPersistentDatabase()) {
+    return json({ error: "Saving is disabled until DATABASE_URL is set in Vercel to your Supabase connection string." }, 503);
+  }
 
   const { resource } = await context.params;
   if (!Object.hasOwn(readers, resource)) return json({ error: "Not found." }, 404);
@@ -116,7 +131,8 @@ async function handle(request, context) {
       const data = await body(request, 2000);
       if (resource === "media") {
         const media = await deleteMedia(data.id);
-        if (media.url) await deleteBlob(media.url);
+        if (media.url && isSupabaseStorageUrl(media.url)) await deleteFromSupabase(media.url);
+        else if (media.url) await deleteBlob(media.url);
         else await unlink(path.join(process.cwd(), ".data", "media", media.id)).catch(error => {
           if (error.code !== "ENOENT") throw error;
         });

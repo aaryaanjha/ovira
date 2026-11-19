@@ -22,7 +22,7 @@ Set `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, and `ADMIN_SESSION_SECRET` in `.env
 
 Local development uses SQLite at `.data/ovira.sqlite` and stores uploads under `.data/media/`. Keep these files on persistent storage and include them in protected backups; the database contains appointment and contact information. `OVIRA_DB_PATH` can change the database file location.
 
-For Vercel, connect a Neon Postgres database and Vercel Blob storage to the project. Set `DATABASE_URL` (or `POSTGRES_URL`) to the pooled Neon connection string; the app creates its schema and seeds the starter content on first use. Vercel Blob supplies `BLOB_READ_WRITE_TOKEN` for admin image uploads. Set `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `ADMIN_SESSION_SECRET`, and `APP_ORIGIN` in the Vercel Production environment, then redeploy. The local SQLite database and uploaded files are not copied automatically to Neon or Blob; transfer them deliberately if needed, and do not commit `.data/`.
+For Vercel, the site uses Supabase: Postgres for content, leads and appointments, and Supabase Storage for admin image uploads. See **Deploy on Vercel with Supabase** below. The local SQLite database and uploaded files are not copied automatically to Supabase; transfer them deliberately if needed, and do not commit `.data/`.
 
 ### Google Sheets for appointments
 
@@ -33,6 +33,29 @@ Put the Google variables in your private `.env.local` file, then run `npm run sh
 On other production hosts, SQLite and uploads can remain under `.data/` if the host provides persistent storage. Use HTTPS and set `APP_ORIGIN` to the exact public origin. The admin uses a signed, HttpOnly session cookie that expires after eight hours. Rotating the password hash or session secret invalidates existing sessions. Use a single application instance for SQLite and configure host-level rate limits; set `TRUSTED_CLIENT_IP_HEADER` only when a trusted proxy overwrites that header.
 
 Before deployment, run `npm run build` and `npm start`. Verify that a test appointment appears in Leads and Appointments, update its status, publish a test blog, and confirm published content and contact changes appear on the public site. Do not enter medical information in the appointment form or staff notes.
+
+## Deploy on Vercel with Supabase
+
+1. **Create the database.** In Supabase, open your project → **SQL Editor** → **New query**, paste all of [`supabase/setup.sql`](supabase/setup.sql) and click **Run**. It creates the tables, turns on row-level security, adds the starter articles, myths, slides and contact details, and creates the public `ovira-media` image bucket. Running it again is safe.
+2. **Create the admin login.** Run `npm run admin:password -- "your strong password"` (12+ characters). It prints `ADMIN_PASSWORD_HASH` and `ADMIN_SESSION_SECRET`.
+3. **Add environment variables** in Vercel → Project → **Settings** → **Environment Variables** (Production and Preview):
+
+   | Name | Where to find it |
+   | --- | --- |
+   | `DATABASE_URL` | Supabase → **Connect** → **Transaction pooler** connection string (port 6543), with your database password filled in |
+   | `SUPABASE_URL` | Supabase → Project Settings → **API** → Project URL |
+   | `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → **API** → `service_role` secret key (never share it or expose it in the browser) |
+   | `ADMIN_USERNAME` | Any login name you choose, for example `admin` |
+   | `ADMIN_PASSWORD_HASH` | From step 2 |
+   | `ADMIN_SESSION_SECRET` | From step 2 |
+   | `APP_ORIGIN` | Your live site address, for example `https://www.ovirascience.com` (no trailing slash) |
+
+4. **Redeploy** from Vercel → Deployments → ⋯ → **Redeploy**.
+5. **Check it:** send a test request from `/appointment`, sign in at `/admin` and confirm it appears under Leads and Appointments, then upload a test image under Media.
+
+If `DATABASE_URL` is missing on Vercel, the pages still load from built-in content. Appointment requests can still be stored in Google Sheets when the Sheets credentials are configured; otherwise the form offers direct contact options and the admin panel cannot save changes.
+
+If the schema or starter content changes in code, regenerate the SQL with `npm run supabase:sql`.
 
 ## Search and sharing
 
