@@ -2,7 +2,7 @@ import AppointmentForm from "../../../components/AppointmentForm";
 import JsonLd from "../../../components/JsonLd";
 import { ContactLines } from "../../../components/PublicContent";
 import { hasAppointmentStorage, publicContact } from "../../../lib/store.mjs";
-import { pageMetadata, siteUrl } from "../../../lib/seo.mjs";
+import { breadcrumbSchema, pageMetadata, siteUrl } from "../../../lib/seo.mjs";
 
 export const metadata = pageMetadata({
   title: "Contact OVIRA Fertility Care",
@@ -21,7 +21,7 @@ export default async function Page() {
     mainEntity: { "@id": siteUrl("/#organization") },
   };
   return (
-    <main><JsonLd data={contactPageSchema} />
+    <main><JsonLd data={breadcrumbSchema("Contact OVIRA", "/appointment")} /><JsonLd data={contactPageSchema} />
       <section className="page-hero wrap">
         <p className="eyebrow">A thoughtful first step</p>
         <h1>Start your fertility care<br /><em>conversation.</em></h1>
