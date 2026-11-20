@@ -2,9 +2,11 @@ import SiteHeader from "../../components/SiteHeader";
 import SiteFooter from "../../components/SiteFooter";
 import JsonLd from "../../components/JsonLd";
 import { publicContact, publicSocials } from "../../lib/store.mjs";
-import { siteUrl } from "../../lib/seo.mjs";
+import { postalAddress, siteUrl } from "../../lib/seo.mjs";
 
-export const dynamic = "force-dynamic";
+// Public pages are served from cache and rebuilt in the background at most once a minute, so
+// visitors never wait on the database. Admin changes refresh the cache straight away.
+export const revalidate = 60;
 
 export default async function SiteLayout({ children }) {
   const [contact, socials] = await Promise.all([publicContact(), publicSocials()]);
@@ -20,16 +22,17 @@ export default async function SiteLayout({ children }) {
         legalName: contact.companyName,
         url: siteUrl("/"),
         logo: { "@type": "ImageObject", url: siteUrl("/assets/ovira-logo.png") },
-        email: contact.email,
-        telephone: contact.phone,
-        address: { "@type": "PostalAddress", streetAddress: contact.address, addressCountry: "IN" },
+        email: contact.email || undefined,
+        telephone: contact.phone || undefined,
+        address: postalAddress(contact.address),
         contactPoint: {
           "@type": "ContactPoint",
           contactType: "customer support",
-          telephone: contact.phone,
-          email: contact.email,
+          telephone: contact.phone || undefined,
+          email: contact.email || undefined,
         },
-        sameAs: socials.map(social => social.url),
+        // An empty sameAs list is reported as an invalid value, so leave it out until links exist.
+        ...(socials.length ? { sameAs: socials.map(social => social.url) } : {}),
       },
       {
         "@type": "WebSite",

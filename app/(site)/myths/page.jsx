@@ -1,7 +1,7 @@
 import JsonLd from "../../../components/JsonLd";
-import { MythList } from "../../../components/PublicContent";
+import { MythList, hasTwinsGuide } from "../../../components/PublicContent";
 import MythQuestionForm from "../../../components/MythQuestionForm";
-import { publicMyths } from "../../../lib/store.mjs";
+import { publicArticles, publicMyths } from "../../../lib/store.mjs";
 import { breadcrumbSchema, pageMetadata } from "../../../lib/seo.mjs";
 
 export const metadata = pageMetadata({
@@ -11,7 +11,7 @@ export const metadata = pageMetadata({
 });
 
 export default async function Page() {
-  const myths = await publicMyths();
+  const [myths, articles] = await Promise.all([publicMyths(), publicArticles()]);
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -22,6 +22,6 @@ export default async function Page() {
     })),
   };
   return (
-    <main><JsonLd data={breadcrumbSchema("IVF Myths & Facts", "/myths")} /><JsonLd data={faqSchema} /><section className="page-hero wrap"><p className="eyebrow">IVF: Myths &amp; Facts</p><h1>IVF myths and facts,<br /><em>explained clearly.</em></h1><p>IVF is an advanced fertility treatment, but common misconceptions can create fear and confusion. Explore clear, thoughtful answers to questions people often ask.</p></section><section className="wrap myths-page"><div className="disclaimer-note"><span aria-hidden="true">✳</span><p>These general explanations are for education, not personal medical advice. Your care team can help you understand what applies to you.</p></div><MythList items={myths} /><MythQuestionForm /></section></main>
+    <main><JsonLd data={breadcrumbSchema("IVF Myths & Facts", "/myths")} />{myths.length > 0 && <JsonLd data={faqSchema} />}<section className="page-hero wrap"><p className="eyebrow">IVF: Myths &amp; Facts</p><h1>IVF myths and facts,<br /><em>explained clearly.</em></h1><p>IVF is an advanced fertility treatment, but common misconceptions can create fear and confusion. Explore clear, thoughtful answers to questions people often ask.</p></section><section className="wrap myths-page"><div className="disclaimer-note"><span aria-hidden="true">✳</span><p>These general explanations are for education, not personal medical advice. Your care team can help you understand what applies to you.</p></div><MythList items={myths} guideAvailable={hasTwinsGuide(articles)} /><MythQuestionForm /></section></main>
   );
 }
