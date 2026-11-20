@@ -1,7 +1,7 @@
 import { publicArticles } from "../lib/store.mjs";
 import { siteUrl } from "../lib/seo.mjs";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 600;
 
 const publicPages = ["/", "/about", "/blogs", "/myths", "/appointment", "/privacy", "/terms"];
 

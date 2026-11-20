@@ -10,6 +10,7 @@ import {
   deleteSocial, deleteTestimonial, saveAppointment, saveContact, saveLead, saveMyth, savePost,
   saveSlide, saveSocial, saveTestimonial, InputError,
 } from "../../../../lib/store.mjs";
+import { revalidatePath } from "next/cache";
 import { body, failure, json, limited, rejectOrigin } from "../../../../lib/http.mjs";
 import { hasPersistentDatabase } from "../../../../lib/database.mjs";
 
@@ -104,7 +105,17 @@ async function uploadImage(request) {
   return json({ data: { ...media, url: "/media/" + media.id } }, 201);
 }
 
+// Leads and appointments never appear on public pages; every other change does.
+const privateResources = new Set(["leads", "appointments", "analytics"]);
+
 async function handle(request, context) {
+  const response = await respond(request, context);
+  const { resource } = await context.params;
+  if (request.method !== "GET" && response.ok && !privateResources.has(resource)) revalidatePath("/", "layout");
+  return response;
+}
+
+async function respond(request, context) {
   if (!validSession(request.cookies.get(sessionName)?.value)) return json({ error: "Sign in to continue." }, 401);
   const method = request.method;
   const write = method !== "GET";

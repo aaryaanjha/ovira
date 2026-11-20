@@ -54,19 +54,23 @@ export function ArticleView({ article, related, index }) {
   </main>;
 }
 
-export function MythPreview({ item, index }) {
-  const twinsGuide = /twins|multiple pregnancies/i.test(item.myth);
+export const twinsGuideSlug = "myth-multiple-pregnancy";
+export const hasTwinsGuide = articles => articles.some(article => (article.slug || article.id) === twinsGuideSlug);
+
+// The guide link only renders when that article is published, so it can never be a broken link.
+export function MythPreview({ item, index, guideAvailable = false }) {
+  const twinsGuide = guideAvailable && /twins|multiple pregnancies/i.test(item.myth);
   return <details className="myth-card myth-preview-card">
     <summary><span className="myth-number">{String(index + 1).padStart(2, "0")}</span><span><span className="myth-label">Myth</span>{item.myth}</span><span className="plus" aria-hidden="true">+</span></summary>
     <p><b>Fact:</b> {item.fact}</p>
     {item.more && <p>{item.more}</p>}
-    {twinsGuide && <a className="myth-guide-link" href="/article/myth-multiple-pregnancy">Read our guide to twins and fertility treatment →</a>}
+    {twinsGuide && <a className="myth-guide-link" href={"/article/" + twinsGuideSlug}>Read our guide to twins and fertility treatment →</a>}
   </details>;
 }
 
-export function MythList({ items }) {
+export function MythList({ items, guideAvailable = false }) {
   return <div id="myths-all" className="myth-list myth-list-page">
-    {items.map((item, index) => <MythPreview key={item.id} item={item} index={index} />)}
+    {items.map((item, index) => <MythPreview key={item.id} item={item} index={index} guideAvailable={guideAvailable} />)}
     {!items.length && <p className="empty-search">Myths &amp; Facts are being updated. Please check back soon.</p>}
   </div>;
 }

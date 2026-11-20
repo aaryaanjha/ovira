@@ -1,5 +1,5 @@
 import IVFCycle from "../../components/IVFCycle";
-import { ArticleCard, ContactRibbon, MythPreview } from "../../components/PublicContent";
+import { ArticleCard, ContactRibbon, MythPreview, hasTwinsGuide } from "../../components/PublicContent";
 import { publicArticles, publicContact, publicMyths, publicSlides, publicTestimonials } from "../../lib/store.mjs";
 import { pageMetadata } from "../../lib/seo.mjs";
 
@@ -52,7 +52,7 @@ export default async function Home() {
           <a className="text-link" href="/myths">Browse all fertility facts <span aria-hidden="true">→</span></a>
         </div>
         <div className="myth-list">
-          {myths.slice(0, 3).map((item, index) => <MythPreview key={item.id} item={item} index={index} />)}
+          {myths.slice(0, 3).map((item, index) => <MythPreview key={item.id} item={item} index={index} guideAvailable={hasTwinsGuide(articles)} />)}
           {!myths.length && <p className="empty-search">Myths &amp; Facts are being updated. Please check back soon.</p>}
         </div>
       </section>
