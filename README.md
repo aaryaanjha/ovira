@@ -54,7 +54,11 @@ Before deployment, run `npm run build` and `npm start`. Verify that a test appoi
 4. **Redeploy** from Vercel → Deployments → ⋯ → **Redeploy**.
 5. **Check it:** send a test request from `/appointment`, sign in at `/admin` and confirm it appears under Leads and Appointments. Upload an image under Media, verify it displays on the site, then edit and publish a test post to confirm database and Storage work together.
 
-If `DATABASE_URL` is missing on Vercel, the pages still load from built-in content. Appointment requests can still be stored in Google Sheets when the Sheets credentials are configured; otherwise the form offers direct contact options and the admin panel cannot save changes.
+After signing in, the **Dashboard** shows a setup check for the database, image storage and site address. Each problem comes with the exact fix (wrong password, wrong connection string type, missing bucket, wrong key). If something on the live site looks wrong, check there first.
+
+If `DATABASE_URL` is missing or the database cannot be reached, public pages still load from built-in content and the problem is logged in Vercel's function logs. Saving form requests and admin changes needs a working database.
+
+`SUPABASE_SERVICE_ROLE_KEY` accepts either the legacy `service_role` key (`eyJ…`) or the newer secret key (`sb_secret_…`).
 
 If the schema or starter content changes in code, regenerate the SQL with `npm run supabase:sql`.
 

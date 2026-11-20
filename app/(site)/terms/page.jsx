@@ -1,5 +1,6 @@
+import JsonLd from "../../../components/JsonLd";
 import { publicContact } from "../../../lib/store.mjs";
-import { pageMetadata } from "../../../lib/seo.mjs";
+import { breadcrumbSchema, pageMetadata } from "../../../lib/seo.mjs";
 
 export const metadata = pageMetadata({
   title: "Terms and Conditions",
@@ -10,6 +11,6 @@ export const metadata = pageMetadata({
 export default async function Page() {
   const { email } = await publicContact();
   return (
-    <main className="wrap legal-page"><p className="eyebrow">OVIRA</p><h1>Terms &amp; Conditions</h1><p className="legal-updated">Last updated: 12 November 2026</p><h2>Using this website</h2><p>This website shares general information about fertility and OVIRA services. It is not a substitute for professional medical advice, diagnosis, or treatment. Please speak with a qualified clinician about your individual health.</p><h2>Appointment requests</h2><p>Submitting a request does not create a doctor-patient relationship or confirm an appointment. Our team will contact you to discuss availability and next steps.</p><h2>Contact</h2><p>For questions about these terms, contact <a href={"mailto:" + email}>{email}</a>.</p></main>
+    <main className="wrap legal-page"><JsonLd data={breadcrumbSchema("Terms & Conditions", "/terms")} /><p className="eyebrow">OVIRA</p><h1>Terms &amp; Conditions</h1><p className="legal-updated">Last updated: 12 November 2026</p><h2>Using this website</h2><p>This website shares general information about fertility and OVIRA services. It is not a substitute for professional medical advice, diagnosis, or treatment. Please speak with a qualified clinician about your individual health.</p><h2>Appointment requests</h2><p>Submitting a request does not create a doctor-patient relationship or confirm an appointment. Our team will contact you to discuss availability and next steps.</p><h2>Contact</h2><p>For questions about these terms, contact <a href={"mailto:" + email}>{email}</a>.</p></main>
   );
 }

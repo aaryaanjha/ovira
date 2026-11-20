@@ -1,5 +1,6 @@
+import JsonLd from "../../../components/JsonLd";
 import { ContactLines } from "../../../components/PublicContent";
-import { pageMetadata } from "../../../lib/seo.mjs";
+import { breadcrumbSchema, pageMetadata } from "../../../lib/seo.mjs";
 import { publicContact } from "../../../lib/store.mjs";
 
 export const metadata = pageMetadata({
@@ -11,7 +12,7 @@ export const metadata = pageMetadata({
 export default async function AboutPage() {
   const contact = await publicContact();
   return (
-    <main>
+    <main><JsonLd data={breadcrumbSchema("About OVIRA", "/about")} />
       <section className="page-hero wrap">
         <p className="eyebrow">About OVIRA</p>
         <h1>Clear information.<br /><em>A more thoughtful first step.</em></h1>

@@ -1,7 +1,7 @@
 import JsonLd from "../../../components/JsonLd";
 import Journal from "../../../components/Journal";
 import { publicArticles } from "../../../lib/store.mjs";
-import { pageMetadata, siteUrl } from "../../../lib/seo.mjs";
+import { breadcrumbSchema, pageMetadata, siteUrl } from "../../../lib/seo.mjs";
 
 export const metadata = pageMetadata({
   title: "Fertility and IVF Articles",
@@ -27,6 +27,6 @@ export default async function Page() {
     },
   };
   return (
-    <main><JsonLd data={collectionSchema} /><section className="page-hero wrap"><p className="eyebrow">The OVIRA blogs</p><h1>Fertility and IVF articles<br />for your <em>journey.</em></h1><p>Clear, compassionate reading to help you feel more informed and less alone.</p></section><Journal articles={articles} /></main>
+    <main><JsonLd data={breadcrumbSchema("Fertility Articles", "/blogs")} /><JsonLd data={collectionSchema} /><section className="page-hero wrap"><p className="eyebrow">The OVIRA blogs</p><h1>Fertility and IVF articles<br />for your <em>journey.</em></h1><p>Clear, compassionate reading to help you feel more informed and less alone.</p></section><Journal articles={articles} /></main>
   );
 }

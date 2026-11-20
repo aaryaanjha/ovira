@@ -22,7 +22,7 @@ const sheetsOnlyGroups = groups.map(group => ({
   items: group.items.filter(([key]) => ["analytics", "leads", "appointments", "profile"].includes(key)),
 })).filter(group => group.items.length);
 
-export default function Dashboard({ username, sheetsOnly = false }) {
+export default function Dashboard({ username, sheetsOnly = false, setup = [] }) {
   const [tab, setTab] = useState("analytics");
   const [loaded, setLoaded] = useState(null);
   const [revision, setRevision] = useState(0);
@@ -123,6 +123,7 @@ export default function Dashboard({ username, sheetsOnly = false }) {
         <div><p className="admin-kicker">OVIRA · ADMIN</p><h1>{titles[tab]}</h1></div>
         <button type="button" className="admin-button quiet" disabled={saving || tab === "profile"} onClick={refresh}>Refresh</button>
       </header>
+      {tab === "analytics" && <SetupCheck items={setup} />}
       {sheetsOnly && <p className="admin-notice" role="status">Appointment and lead records are stored in the connected Google Sheet. Website content management requires a database.</p>}
       {error && <p className="admin-error" role="alert">{error}</p>}
       {notice && <p className="admin-notice" role="status">{notice}</p>}
@@ -144,4 +145,22 @@ export default function Dashboard({ username, sheetsOnly = false }) {
       <footer className="admin-main-footer"><span>OVIRA Admin</span><span>{sheetsOnly ? "Appointment and lead changes are saved to Google Sheets." : "Changes publish to the website when saved."}</span></footer>
     </main>
   </div>;
+}
+
+function SetupCheck({ items }) {
+  if (!items.length) return null;
+  const problems = items.filter(item => !item.ok);
+  return <section className={"admin-setup " + (problems.length ? "has-problems" : "all-good")} aria-labelledby="setup-title">
+    <h2 id="setup-title">{problems.length ? "Setup needs attention" : "Setup check: everything is connected"}</h2>
+    <ul>
+      {items.map(item => <li key={item.key} className={item.ok ? "ok" : "problem"}>
+        <span aria-hidden="true">{item.ok ? "✓" : "✕"}</span>
+        <div>
+          <strong>{item.label}: {item.title}</strong>
+          {item.detail && <small>{item.detail}</small>}
+          {item.fix && <p>{item.fix}</p>}
+        </div>
+      </li>)}
+    </ul>
+  </section>;
 }

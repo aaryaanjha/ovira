@@ -1,9 +1,9 @@
-import { body, failure, json, limited, rejectOrigin } from "../../../lib/http.mjs";
+import { body, clientIpKnown, failure, json, limited, rejectOrigin } from "../../../lib/http.mjs";
 import { hasAppointmentStorage, newLead } from "../../../lib/store.mjs";
 
 export async function POST(request) {
   if (rejectOrigin(request)) return json({ error: "Invalid request origin." }, 403);
-  if (limited(request, "appointments", process.env.TRUSTED_CLIENT_IP_HEADER ? 8 : 60, 60000)) {
+  if (limited(request, "appointments", clientIpKnown() ? 8 : 60, 60000)) {
     return json({ error: "Please wait a minute and try again." }, 429);
   }
   if (!hasAppointmentStorage()) {
