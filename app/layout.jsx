@@ -19,6 +19,9 @@ const cormorantGaramond = Cormorant_Garamond({
 
 export const metadata = {
   metadataBase: new URL(siteUrl("/")),
+  verification: {
+    google: (process.env.GOOGLE_SITE_VERIFICATION || "").trim() || undefined,
+  },
   title: { default: "Fertility Care & IVF Guidance", template: "%s | OVIRA" },
   description: "Explore compassionate fertility information, IVF guidance, and clear answers to common questions from OVIRA.",
   applicationName: "OVIRA",
