@@ -21,7 +21,7 @@ export default function SiteFooter({ contact, socials = [] }) {
           <div className="footer-column">
             <h3>Get in touch</h3>
             <a href={links.phone}>{contact.phone}</a>
-            <a href={links.whatsapp} target="_blank" rel="noreferrer">WhatsApp us</a>
+            <a href={links.whatsapp} target="_blank" rel="nofollow noopener noreferrer">WhatsApp us</a>
             <a href={links.email}>{contact.email}</a>
             {!!socials.length && <div className="footer-socials" aria-label="Social links">
               {socials.map(social => <a key={social.platform} href={social.url} target="_blank" rel="noreferrer">{social.platform}</a>)}

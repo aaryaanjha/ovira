@@ -3,9 +3,10 @@ import { publicContact } from "../../../lib/store.mjs";
 import { breadcrumbSchema, pageMetadata } from "../../../lib/seo.mjs";
 
 export const metadata = pageMetadata({
-  title: "Privacy Policy",
-  description: "Read how OVIRA handles the contact details you share through appointment requests and how to ask about your information.",
+  title: "Privacy Policy: How OVIRA Handles Enquiry Data",
+  description: "How OVIRA collects, uses and stores the contact details you share through enquiry and appointment forms, and how to ask about or delete your information.",
   path: "/privacy",
+  keywords: ["OVIRA privacy policy", "enquiry data", "data privacy"],
 });
 
 export default async function Page() {

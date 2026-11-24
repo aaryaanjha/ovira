@@ -4,6 +4,8 @@ const redirects = [
   ...["appointment", "blogs", "myths", "privacy", "terms"].map(page => ({
     source: "/" + page + ".html", destination: "/" + page, permanent: true,
   })),
+  // Merged into the step-by-step guide to stop three IVF articles competing for the same searches.
+  { source: "/article/ivf-explained", destination: "/article/ivf-treatment-process", permanent: true },
 ];
 
 const production = process.env.NODE_ENV === "production";

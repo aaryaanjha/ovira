@@ -2,6 +2,7 @@ import "./globals.css";
 import "./design.css";
 import { Cormorant_Garamond, Lora } from "next/font/google";
 import { siteUrl } from "../lib/seo.mjs";
+import { siteKeywords } from "../lib/seo-content.mjs";
 
 const lora = Lora({
   subsets: ["latin"],
@@ -22,8 +23,9 @@ export const metadata = {
   verification: {
     google: (process.env.GOOGLE_SITE_VERIFICATION || "").trim() || undefined,
   },
-  title: { default: "Fertility Care & IVF Guidance", template: "%s | OVIRA" },
-  description: "Explore compassionate fertility information, IVF guidance, and clear answers to common questions from OVIRA.",
+  title: { default: "Fertility & IVF Guidance in India | OVIRA", template: "%s | OVIRA" },
+  description: "Clear, compassionate fertility and IVF information from OVIRA: how IVF works, IVF vs IUI, PCOS and fertility, common myths, and how to reach our team.",
+  keywords: siteKeywords,
   applicationName: "OVIRA",
   publisher: "OVIRA",
   category: "Fertility care",
@@ -37,15 +39,15 @@ export const metadata = {
     type: "website",
     locale: "en_IN",
     siteName: "OVIRA",
-    title: "Fertility Care & IVF Guidance | OVIRA",
-    description: "Explore compassionate fertility care, IVF guidance, and clear answers to common fertility questions from OVIRA.",
+    title: "Fertility & IVF Guidance in India | OVIRA",
+    description: "Clear, compassionate fertility and IVF information from OVIRA: how IVF works, IVF vs IUI, PCOS and fertility, common myths, and how to reach our team.",
     url: "/",
     images: [{ url: "/assets/ovira-share.jpg", width: 1200, height: 630, alt: "OVIRA fertility care and IVF information" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fertility Care & IVF Guidance | OVIRA",
-    description: "Compassionate fertility care, IVF guidance, and clear answers from OVIRA.",
+    title: "Fertility & IVF Guidance in India | OVIRA",
+    description: "Clear, compassionate fertility and IVF information from OVIRA: how IVF works, IVF vs IUI, PCOS, common myths, and how to reach our team.",
     images: ["/assets/ovira-share.jpg"],
   },
 };

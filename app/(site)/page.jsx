@@ -1,12 +1,13 @@
 import IVFCycle from "../../components/IVFCycle";
-import { ArticleCard, ContactRibbon, MythPreview, hasTwinsGuide } from "../../components/PublicContent";
+import { ArticleCard, ContactRibbon, MythPreview, PopularGuides } from "../../components/PublicContent";
 import { publicArticles, publicContact, publicMyths, publicSlides, publicTestimonials } from "../../lib/store.mjs";
 import { pageMetadata } from "../../lib/seo.mjs";
 
 export const metadata = pageMetadata({
-  title: "Fertility Care & IVF Guidance",
-  description: "Explore compassionate fertility information, IVF guidance, and clear answers to common questions from OVIRA.",
+  title: "Fertility & IVF Guidance in India",
+  description: "Clear, compassionate fertility and IVF information from OVIRA: how IVF works, IVF vs IUI, PCOS and fertility, common myths, and how to reach our team.",
   path: "/",
+  keywords: ["fertility care India", "IVF guidance", "IVF treatment", "fertility treatment", "IVF vs IUI", "PCOS and fertility", "IVF myths and facts", "fertility specialist"],
 });
 
 export default async function Home() {
@@ -24,8 +25,8 @@ export default async function Home() {
       <section className="hero wrap" id="home">
         <div className="hero-copy">
           <p className="eyebrow"><span className="eyebrow-dot" /> Fertility care, made personal</p>
-          <h1>Fertility care<br />that starts with <em>you.</em></h1>
-          <p className="hero-lead">Clear fertility information, thoughtful science, and support for your next conversation.</p>
+          <h1>Fertility &amp; IVF care<br />that starts with <em>you.</em></h1>
+          <p className="hero-lead">Clear, plain-language information on fertility, IVF and IUI treatment, PCOS and ovulation, with support for your next conversation.</p>
           <div className="hero-actions">
             <a className="button button-primary" href="/appointment">Contact our care team <span aria-hidden="true">↗</span></a>
             <a className="text-link" href="/myths">Explore fertility facts <span aria-hidden="true">→</span></a>
@@ -47,12 +48,12 @@ export default async function Home() {
       <section className="section wrap myths-preview" id="myths">
         <div className="section-intro">
           <p className="eyebrow">Myths &amp; Facts</p>
-          <h2>Let’s make room<br />for <em>the facts.</em></h2>
+          <h2>IVF myths,<br />and <em>the facts.</em></h2>
           <p>There’s a lot of fertility advice out there. We’re here to help you find what’s helpful, what’s not, and what to ask next.</p>
           <a className="text-link" href="/myths">Browse all fertility facts <span aria-hidden="true">→</span></a>
         </div>
         <div className="myth-list">
-          {myths.slice(0, 3).map((item, index) => <MythPreview key={item.id} item={item} index={index} guideAvailable={hasTwinsGuide(articles)} />)}
+          {myths.slice(0, 3).map((item, index) => <MythPreview key={item.id} item={item} index={index} articles={articles} />)}
           {!myths.length && <p className="empty-search">Myths &amp; Facts are being updated. Please check back soon.</p>}
         </div>
       </section>
@@ -60,12 +61,13 @@ export default async function Home() {
       <section className="section section-soft">
         <div className="wrap">
           <div className="section-heading-row">
-            <div><p className="eyebrow">Blogs</p><h2>Fertility insights<br />worth <em>keeping.</em></h2></div>
+            <div><p className="eyebrow">Blogs</p><h2>Fertility &amp; IVF guides<br />worth <em>keeping.</em></h2></div>
             <a className="text-link" href="/blogs">Visit the blogs <span aria-hidden="true">→</span></a>
           </div>
           <div id="featured-articles" className="article-grid article-grid-featured">
             {articles.slice(0, 4).map((article, index) => <ArticleCard key={article.id} article={article} index={index} />)}
           </div>
+          <PopularGuides articles={articles} />
         </div>
       </section>
 
