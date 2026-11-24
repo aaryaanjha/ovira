@@ -121,6 +121,13 @@ body {
   font-size: 12px;
 }
 
+.myth-heading {
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+}
+
 .myth-label {
   display: block;
   margin-bottom: 4px;
@@ -1391,6 +1398,10 @@ body {
   margin: 0;
   padding-left: 18px;
   font-size: 12px;
+}
+
+.blogs-guides .popular-guides {
+  margin: 0 0 36px;
 }
 
 .journal-list-heading {

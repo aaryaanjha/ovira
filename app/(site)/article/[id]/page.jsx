@@ -26,6 +26,7 @@ export async function generateMetadata({ params }) {
       title: article.seoTitle || article.title,
       description,
       path: url,
+      keywords: article.keywords,
     }),
     openGraph: {
       type: "article",
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }) {
       publishedTime: article.publishedAt || undefined,
       modifiedTime: article.updatedAt || article.publishedAt || undefined,
       authors: [article.author || "OVIRA"],
-      tags: [article.category, "Fertility care"],
+      tags: [article.category, ...article.keywords.slice(0, 4)],
       images: [{ url: image, alt: article.title }],
     },
     twitter: { card: "summary_large_image", title, description, images: [image] },
@@ -68,6 +69,9 @@ export default async function Article({ params }) {
         publisher: { "@id": organizationId },
         mainEntityOfPage: { "@type": "WebPage", "@id": url },
         inLanguage: "en-IN",
+        articleSection: article.category || undefined,
+        keywords: article.keywords.join(", "),
+        wordCount: [article.intro, ...article.sections.flat()].join(" ").trim().split(/\s+/).length,
       },
       {
         "@type": "BreadcrumbList",
@@ -79,9 +83,12 @@ export default async function Article({ params }) {
       },
     ],
   };
+  // In-body links to related guides (only published ones, so they can never be broken links).
+  const bySlug = new Map(articles.map(item => [item.slug || item.id, item]));
+  const guides = article.relatedIds.map(slug => bySlug.get(slug)).filter(item => item && item.id !== article.id);
   const related = articles
     .filter(item => item.id !== article.id)
     .sort((a, b) => Number(b.category === article.category) - Number(a.category === article.category))
     .slice(0, 3);
-  return <><JsonLd data={articleSchema} /><ArticleView article={article} related={related} index={index} /></>;
+  return <><JsonLd data={articleSchema} /><ArticleView article={article} related={related} guides={guides} index={index} /></>;
 }

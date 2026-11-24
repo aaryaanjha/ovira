@@ -4,13 +4,25 @@
 
 ## Main pages
 
-- [Home](https://www.ovirascience.com/): Fertility care information and website overview.
-- [About OVIRA](https://www.ovirascience.com/about): Brand, website purpose, and published company details.
+- [Home](https://www.ovirascience.com/): Fertility and IVF guidance overview.
+- [About OVIRA](https://www.ovirascience.com/about): Website purpose, what it does and does not offer, and published company details.
 - [Fertility and IVF articles](https://www.ovirascience.com/blogs): Searchable educational articles.
-- [IVF myths and facts](https://www.ovirascience.com/myths): Answers to common fertility questions.
+- [IVF myths and facts](https://www.ovirascience.com/myths): Answers to common IVF and fertility questions.
 - [Contact and appointment enquiries](https://www.ovirascience.com/appointment): Contact details and enquiry options.
 - [Privacy policy](https://www.ovirascience.com/privacy): How enquiry details are handled.
 - [Terms and conditions](https://www.ovirascience.com/terms): Website terms and medical information disclaimer.
+
+## Core guides
+
+- [What is IVF?](https://www.ovirascience.com/article/what-is-ivf): What in vitro fertilisation is, why it may be recommended and what affects outcomes.
+- [IVF treatment process](https://www.ovirascience.com/article/ivf-treatment-process): The stages of IVF, from assessment to the pregnancy test.
+- [IVF vs IUI](https://www.ovirascience.com/article/ivf-vs-iui): How the two treatments differ and why the choice depends on diagnosis.
+- [PCOS and infertility](https://www.ovirascience.com/article/pcos-and-infertility): How PCOS affects ovulation and the options clinicians discuss.
+- [Does IVF always mean twins?](https://www.ovirascience.com/article/myth-multiple-pregnancy): Embryo transfer choices and multiple pregnancy.
+- [Male and female infertility](https://www.ovirascience.com/article/fertility-and-partners): Why fertility evaluation often includes both partners.
+- [Understanding ovulation](https://www.ovirascience.com/article/understanding-ovulation): The menstrual cycle, signs of ovulation and timing.
+- [First fertility consultation](https://www.ovirascience.com/article/fertility-first-steps): What a first visit may include and how to prepare.
+- [Emotional wellbeing while trying to conceive](https://www.ovirascience.com/article/supporting-wellbeing): Caring for yourself and finding support.
 
 ## Guidance
 

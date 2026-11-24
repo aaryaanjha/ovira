@@ -5,9 +5,10 @@ import { publicContact } from "../../../lib/store.mjs";
 import { breadcrumbSchema, pageMetadata, siteUrl } from "../../../lib/seo.mjs";
 
 export const metadata = pageMetadata({
-  title: "Contact OVIRA Fertility Care",
-  description: "Contact OVIRA with questions or request a fertility care appointment. Our team can help you understand possible next steps.",
+  title: "Contact OVIRA: Fertility and IVF Enquiries",
+  description: "Contact OVIRA by phone, WhatsApp, email or the enquiry form with fertility and IVF questions, and see what happens after you reach out to our team.",
   path: "/appointment",
+  keywords: ["contact OVIRA", "fertility enquiry", "IVF enquiry", "fertility appointment", "IVF questions"],
 });
 
 export default async function Page() {
@@ -15,7 +16,7 @@ export default async function Page() {
   const contactPageSchema = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    name: "Contact OVIRA Fertility Care",
+    name: "Contact OVIRA: Fertility and IVF Enquiries",
     url: siteUrl("/appointment"),
     mainEntity: { "@id": siteUrl("/#organization") },
   };
@@ -23,7 +24,7 @@ export default async function Page() {
     <main><JsonLd data={breadcrumbSchema("Contact OVIRA", "/appointment")} /><JsonLd data={contactPageSchema} />
       <section className="page-hero wrap">
         <p className="eyebrow">A thoughtful first step</p>
-        <h1>Start your fertility care<br /><em>conversation.</em></h1>
+        <h1>Contact OVIRA about<br /><em>fertility &amp; IVF care.</em></h1>
         <p>Share a few details and our care team will reach out to help you find the right next step.</p>
       </section>
       <section className="contact-section">
